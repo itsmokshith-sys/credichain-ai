@@ -14,16 +14,146 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      blocks: {
+        Row: {
+          block_id: number
+          created_at: string
+          credit_data: Json
+          current_hash: string
+          previous_hash: string
+          request_id: string | null
+          user_email: string
+        }
+        Insert: {
+          block_id?: number
+          created_at?: string
+          credit_data: Json
+          current_hash: string
+          previous_hash: string
+          request_id?: string | null
+          user_email: string
+        }
+        Update: {
+          block_id?: number
+          created_at?: string
+          credit_data?: Json
+          current_hash?: string
+          previous_hash?: string
+          request_id?: string | null
+          user_email?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "blocks_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string | null
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          full_name?: string | null
+          id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string | null
+          id?: string
+        }
+        Relationships: []
+      }
+      requests: {
+        Row: {
+          age: number
+          bank_id: string
+          created_at: string
+          credits_used: number
+          due_amount: number
+          id: string
+          loan_amount: number
+          repayment_history: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          user_email: string
+        }
+        Insert: {
+          age: number
+          bank_id: string
+          created_at?: string
+          credits_used: number
+          due_amount: number
+          id?: string
+          loan_amount: number
+          repayment_history: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          user_email: string
+        }
+        Update: {
+          age?: number
+          bank_id?: string
+          created_at?: string
+          credits_used?: number
+          due_amount?: number
+          id?: string
+          loan_amount?: number
+          repayment_history?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          user_email?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "user" | "bank" | "admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +280,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["user", "bank", "admin"],
+    },
   },
 } as const
